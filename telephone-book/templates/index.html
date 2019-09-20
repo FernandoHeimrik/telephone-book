@@ -1,0 +1,109 @@
+{% include "header.html" %}
+
+<link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet"> {% block body %}
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+            <h2>Contact List <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#mymodal">
+                    Add Contacts</button></h2>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Birth Date</th>
+                    </tr>
+                </thead>
+                {% for contact in contacts %}
+                <tbody>
+                    <tr>
+                        <td>{{contact.id}}</td>
+                        <td>{{contact.name}}</td>
+                        <td>{{date.strftime(contact.birthDate,'%d/%m/%Y')}}</td>
+                        <td>
+                            <a href="./delete/{{contact.id}}" class="btn btn-danger btn-xs float-right" onclick="return confirm('Are You Sure To Delete?')">Delete</a>
+                            <a href="./update/{{contact.id}}" class="btn btn-warning btn-xs float-right" data-toggle="modal" data-target="#modaledit{{contact.id}}">Edit</a>
+                        </td>
+                    </tr>
+                    <!-- Modal edit -->
+                    <div id="modaledit{{contact.id}}" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Update Information</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="./update" method="POST">
+                                        <div class="form-group">
+                                            <label>Name:</label>
+                                            <input type="hidden" name="id" value="{{contact.id}}">
+                                            <input type="text" class="form-control" name="name" value="{{contact.name}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Birth Date: </label>
+                                            <input type="text" class="form-control" name="birthDate" value="{{date.strftime(contact.birthDate,'%d/%m/%Y')}}" data-mask="00/00/0000">
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary" type="sub mit">Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal add -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Please Insert Contact</h4>
+            </div>
+            <div class="modal-body">
+                <form action="./create" method="POST">
+                    <div class="form-group">
+                        <label>Name: </label>
+                        <input type="text" class="form-control" name="name" required="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Birth Date: </label>
+                        <input type="text" class="form-control" data-mask="00/00/0000" name="birthDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone: </label>
+                        <input type="text" class="form-control" name="phone" required="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Zip code: </label>
+                        <input type="text" class="form-control" name="zipCode" required="1">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Insert Contact</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% include "footer.html" %}
+</div>
+
+{% endblock %}
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+<script type="text/javascript" src="{{url_for('static', filename = 'js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename = 'js/jquery.mask.min.js')}}"></script>
